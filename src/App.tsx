@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Github,
@@ -28,20 +28,18 @@ import {
   Award,
   MessageSquare,
 } from 'lucide-react';
-import AnimatedShaderBackground from './components/ui/animated-shader-background';
 import { Spotlight } from './components/ui/spotlight';
 import { SplineScene } from './components/ui/splite';
 import { cn } from './lib/utils';
 import Magnetic from './components/ui/magnetic';
-import { FloatingNav } from './components/ui/floating-navbar';
-import { HeroHighlight } from './components/ui/hero-highlight';
+import { Timeline } from './components/ui/timeline';
+import { CustomCursor } from './components/ui/custom-cursor';
 import { AIChatbot } from './components/ui/ai-chatbot';
 import { supabase } from './lib/supabase';
 import type { Language } from './lib/translations';
 import { translations, LANGUAGES } from './lib/translations';
 import { ThemeToggle } from './components/ui/theme-toggle';
 import { RatingInteraction } from './components/ui/emoji-rating';
-import DialogLogout from './components/ui/dialog-deactivate';
 import { ContainerScroll } from './components/ui/container-scroll-animation';
 import RadialOrbitalTimeline from './components/ui/radial-orbital-timeline';
 import DisplayCards from './components/ui/display-cards';
@@ -86,7 +84,6 @@ const SOCIALS = [
 
 const App = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [contactForm, setContactForm] = useState({ name: '', email: '', query: '' });
   const [isSending, setIsSending] = useState(false);
   const [sendSuccess, setSendSuccess] = useState(false);
@@ -892,25 +889,11 @@ const App = () => {
                     </div>
                   </div>
 
-                  <div className="col-span-full border-t border-white/5 pt-12 text-center space-y-8">
-                    <div className="bg-red-500/5 border border-red-500/20 p-8 rounded-3xl group hover:border-red-500/50 transition-all">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-red-500 mb-6 italic">Secure Session Terminal</p>
-                      <DialogLogout onLogout={async () => {
-                        await supabase.auth.signOut();
-                        setIsAuthenticated(false);
-                        setIsSettingsOpen(false);
-                      }} />
-                      <p className="text-[10px] text-neutral-600 uppercase font-medium mt-6 flex items-center justify-center gap-2">
-                        Warning: This will terminate your current active session
-                      </p>
-                    </div>
-
-                    <div className="pt-8 flex flex-col items-center gap-4">
-                      <RatingInteraction />
-                      <p className="text-[10px] text-neutral-600 uppercase font-medium flex items-center gap-1 mt-4">
-                        Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> by Antigravity AI
-                      </p>
-                    </div>
+                  <div className="pt-8 flex flex-col items-center gap-4 border-t border-white/5">
+                    <RatingInteraction />
+                    <p className="text-[10px] text-neutral-600 uppercase font-medium flex items-center gap-1 mt-4">
+                      Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> by Antigravity AI
+                    </p>
                   </div>
                 </div>
               </div>
