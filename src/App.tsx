@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Github,
@@ -33,9 +33,8 @@ import { Spotlight } from './components/ui/spotlight';
 import { SplineScene } from './components/ui/splite';
 import { cn } from './lib/utils';
 import Magnetic from './components/ui/magnetic';
-import { CustomCursor } from './components/ui/custom-cursor';
-import { Timeline } from './components/ui/timeline';
-import { AuthScreen } from './components/auth-screen';
+import { FloatingNav } from './components/ui/floating-navbar';
+import { HeroHighlight } from './components/ui/hero-highlight';
 import { AIChatbot } from './components/ui/ai-chatbot';
 import { supabase } from './lib/supabase';
 import type { Language } from './lib/translations';
@@ -73,6 +72,7 @@ const ASSETS = {
   certTcs: '/assets/cert_tcs_comm.png',
   certNptel: '/assets/cert_nptel_iot.png',
   hoverProfile: '/assets/varun_hover.png',
+  heroVideo: '/assets/login_bg.mp4',
 };
 
 const SOCIALS = [
@@ -134,15 +134,6 @@ const App = () => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) setIsAuthenticated(true);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) setIsAuthenticated(true);
-      else setIsAuthenticated(false);
-    });
-
     // Toggle for About section side photo
     const interval = setInterval(() => {
       setPhotoToggle((prev) => (prev === 0 ? 1 : 0));
@@ -150,7 +141,6 @@ const App = () => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      subscription.unsubscribe();
       clearInterval(interval);
     };
   }, []);
@@ -162,9 +152,6 @@ const App = () => {
     transition: { duration: 0.6 }
   };
 
-  if (!isAuthenticated) {
-    return <AuthScreen onAuthenticated={() => setIsAuthenticated(true)} />;
-  }
 
   const INTERNSHIPS = [
     {
@@ -308,7 +295,18 @@ const App = () => {
 
       {/* Hero Section */}
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <AnimatedShaderBackground />
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <div className="absolute inset-0 bg-black/40 z-10" />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src={ASSETS.heroVideo} type="video/mp4" />
+          </video>
+        </div>
         <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="purple" />
 
         <div className="container mx-auto px-6 relative z-10 text-center">
